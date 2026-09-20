@@ -1,0 +1,12 @@
+﻿{
+    "schemaVersion":  1,
+    "versionCode":  7,
+    "versionName":  "0.1.1-test.6",
+    "apkUrl":  "https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/v0.1.1-test.6/sogon-0.1.1-test.6-tester-arm64-debug.apk",
+    "sha256":  "0b04d8edbc1eeb66477bed4d6474482b3f1a70e282f3609e9eace22ce1e79a6a",
+    "apkBytes":  43188055,
+    "required":  false,
+    "minSupportedVersionCode":  0,
+    "notes":  "앱 안에서 새 테스트 버전을 확인하고, APK를 내려받아 해시 검증 후 Android 업데이트 화면으로 이어갈 수 있어요.",
+    "publishedAt":  "2026-09-20T11:00:38Z"
+}
