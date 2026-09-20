@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "versionCode": 14,
-  "versionName": "0.1.1-test.13",
-  "apkUrl": "https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/v0.1.1-test.13/sogon-0.1.1-test.13-tester-arm64-debug.apk",
-  "sha256": "a3beb017fa8f607bbc25e6fd4509f25bb295729a03215470fc14801acef4fe48",
+  "versionCode": 16,
+  "versionName": "0.1.1-test.15",
+  "apkUrl": "https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/v0.1.1-test.15/sogon-0.1.1-test.15-tester-arm64-debug.apk",
+  "sha256": "1fed6358d13984f2208e897ebfd8adb46035f6099e5b79e01c566adb4bcdd31b",
   "apkBytes": 43188067,
   "required": false,
   "minSupportedVersionCode": 0,
-  "notes": "근처 다른 방을 자동으로 섞지 않고, 선택한 씨앗만 명시적으로 입장하도록 정리했어요. Nearby 연결 충돌과 유령 씨앗 핀도 함께 줄였어요.",
-  "publishedAt": "2026-09-20T13:31:09Z"
+  "notes": "자리 이탈 후 돌아왔을 때 Nearby 연결이 실패해도 광고·탐색을 자동 복구하고 다시 연결하도록 보강했어요. HyperOS 서비스 시작 크래시도 함께 수정했어요.",
+  "publishedAt": "2026-09-20T14:33:31Z"
 }
