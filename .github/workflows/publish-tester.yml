@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cp publish/latest.json "$RUNNER_TEMP/latest.json"
+          jq '.' publish/latest.json > "$RUNNER_TEMP/latest.json"
           git fetch origin main
           git checkout -B update-latest origin/main
           cp "$RUNNER_TEMP/latest.json" latest.json
