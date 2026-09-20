@@ -1,4 +1,4 @@
-﻿name: Publish Sogon tester APK
+name: Publish Sogon tester APK
 
 on:
   push:
@@ -24,11 +24,28 @@ jobs:
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
-      - name: Verify tester APK
+      - name: Verify tester APK and update manifest
         shell: bash
         run: |
           set -euo pipefail
           sha256sum -c publish/SHA256SUMS
+          test -f publish/latest.json
+          apk_count="$(find publish -maxdepth 1 -type f -name '*.apk' | wc -l | tr -d ' ')"
+          test "$apk_count" = "1"
+          apk_file="$(find publish -maxdepth 1 -type f -name '*.apk' | head -n 1)"
+          expected_sha="$(awk 'NR==1 {print tolower($1)}' publish/SHA256SUMS)"
+          manifest_sha="$(jq -r '.sha256 | ascii_downcase' publish/latest.json)"
+          manifest_bytes="$(jq -r '.apkBytes' publish/latest.json)"
+          actual_bytes="$(stat -c '%s' "$apk_file")"
+          test "$manifest_sha" = "$expected_sha"
+          test "$manifest_bytes" = "$actual_bytes"
+          jq -e '
+            .schemaVersion == 1 and
+            (.versionCode | type == "number") and
+            (.versionName | type == "string" and length > 0) and
+            (.apkUrl | type == "string" and startswith("https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/")) and
+            (.sha256 | type == "string" and length == 64)
+          ' publish/latest.json >/dev/null
 
       - name: Publish GitHub prerelease
         env:
@@ -39,7 +56,27 @@ jobs:
         run: |
           set -euo pipefail
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release upload "$TAG"               publish/*.apk               --repo "$GITHUB_REPOSITORY"               --clobber
+            gh release upload "$TAG" publish/*.apk --repo "$GITHUB_REPOSITORY" --clobber
           else
-            gh release create "$TAG"               publish/*.apk               --repo "$GITHUB_REPOSITORY"               --target main               --title "$TITLE"               --notes-file publish/release-notes.md               --prerelease
+            gh release create "$TAG" publish/*.apk               --repo "$GITHUB_REPOSITORY"               --target main               --title "$TITLE"               --notes-file publish/release-notes.md               --prerelease
           fi
+
+      - name: Point latest.json at the published tester
+        env:
+          TAG: ${{ steps.meta.outputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp publish/latest.json "$RUNNER_TEMP/latest.json"
+          git fetch origin main
+          git checkout -B update-latest origin/main
+          cp "$RUNNER_TEMP/latest.json" latest.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest.json
+          if git diff --cached --quiet; then
+            echo "latest.json already points at $TAG"
+            exit 0
+          fi
+          git commit -m "Point latest tester to $TAG"
+          git push origin HEAD:main
