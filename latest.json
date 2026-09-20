@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "versionCode": 8,
-  "versionName": "0.1.1-test.7",
-  "apkUrl": "https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/v0.1.1-test.7/sogon-0.1.1-test.7-tester-arm64-debug.apk",
-  "sha256": "ad70a6439537a3df211c6d2793a999f0eb3d9e00bd7eee6d0733d31be78d7108",
+  "versionCode": 14,
+  "versionName": "0.1.1-test.13",
+  "apkUrl": "https://github.com/samkjsong-bot/Sogon-Downloads/releases/download/v0.1.1-test.13/sogon-0.1.1-test.13-tester-arm64-debug.apk",
+  "sha256": "a3beb017fa8f607bbc25e6fd4509f25bb295729a03215470fc14801acef4fe48",
   "apkBytes": 43188067,
   "required": false,
   "minSupportedVersionCode": 0,
-  "notes": "앱 안 자동업데이트를 안정화했어요. GitHub 최신버전 확인, APK 다운로드, SHA-256 검증, Android 설치 화면 연결까지 소곤 안에서 이어져요.",
-  "publishedAt": "2026-09-20T11:06:31Z"
+  "notes": "근처 다른 방을 자동으로 섞지 않고, 선택한 씨앗만 명시적으로 입장하도록 정리했어요. Nearby 연결 충돌과 유령 씨앗 핀도 함께 줄였어요.",
+  "publishedAt": "2026-09-20T13:31:09Z"
 }
