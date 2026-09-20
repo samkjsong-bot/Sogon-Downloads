@@ -1,0 +1,45 @@
+﻿name: Publish Sogon tester APK
+
+on:
+  push:
+    branches:
+      - 'publish/**'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read release metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$(tr -d '\r\n' < publish/release-tag.txt)"
+          title="$(tr -d '\r\n' < publish/release-title.txt)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+
+      - name: Verify tester APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c publish/SHA256SUMS
+
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          TITLE: ${{ steps.meta.outputs.title }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG"               publish/*.apk               --repo "$GITHUB_REPOSITORY"               --clobber
+          else
+            gh release create "$TAG"               publish/*.apk               --repo "$GITHUB_REPOSITORY"               --target main               --title "$TITLE"               --notes-file publish/release-notes.md               --prerelease
+          fi
